@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace spec\Flagbit\Bundle\CategoryBundle\Serializer\Normalizer;
 
-use Akeneo\Tool\Component\Classification\Model\CategoryInterface;
+use Akeneo\Category\Infrastructure\Component\Classification\Model\CategoryInterface;
 use Flagbit\Bundle\CategoryBundle\Entity\CategoryConfig;
 use Flagbit\Bundle\CategoryBundle\Entity\CategoryProperty;
 use PhpSpec\ObjectBehavior;

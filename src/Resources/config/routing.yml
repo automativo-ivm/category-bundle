@@ -7,7 +7,7 @@ flagbit_category.internal_api.category_config_get:
   requirements:
     identifier: '[0-9]+'
   defaults:
-    _controller: Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryConfigController:get
+    _controller: Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryConfigController::get
 
 flagbit_category.internal_api.category_config_post:
   path: /flagbit/category/api/config/{identifier}
@@ -15,7 +15,7 @@ flagbit_category.internal_api.category_config_post:
   requirements:
     identifier: '[0-9]+'
   defaults:
-    _controller: Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryConfigController:post
+    _controller: Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryConfigController::post
 
 flagbit_category.internal_api.category_property_get:
   path: /flagbit/category/api/property/{identifier}
@@ -23,4 +23,4 @@ flagbit_category.internal_api.category_property_get:
   requirements:
     identifier: '[a-z_0-9]+'
   defaults:
-    _controller: Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryPropertyController:get
+    _controller: Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryPropertyController::get

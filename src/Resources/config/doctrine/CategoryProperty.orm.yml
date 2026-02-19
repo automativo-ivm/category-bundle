@@ -15,7 +15,7 @@ Flagbit\Bundle\CategoryBundle\Entity\CategoryProperty:
 
   oneToOne:
     category:
-      targetEntity: Akeneo\Pim\Enrichment\Component\Category\Model\CategoryInterface
+      targetEntity: Akeneo\Category\Infrastructure\Component\Model\CategoryInterface
       joinColumn:
         name: category_id
         referencedColumnName: id

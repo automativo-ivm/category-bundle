@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flagbit\Bundle\CategoryBundle\Entity;
 
-use Akeneo\Pim\Enrichment\Component\Category\Model\CategoryInterface;
+use Akeneo\Category\Infrastructure\Component\Model\CategoryInterface;
 
 class CategoryProperty
 {

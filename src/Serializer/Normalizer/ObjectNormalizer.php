@@ -21,10 +21,8 @@ class ObjectNormalizer implements NormalizerInterface
     /**
      * @phpstan-param mixed $data
      * @phpstan-param string|null $format
-     *
-     * @phpstan-return bool
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null, array $context = []): bool
     {
         return $data instanceof CategoryConfig || $data instanceof CategoryProperty;
     }
@@ -34,11 +32,9 @@ class ObjectNormalizer implements NormalizerInterface
      * @phpstan-param string|null $format
      * @phpstan-param array<string, mixed> $context
      *
-     * @phpstan-return array<string, mixed>
-     *
      * @throws ExceptionInterface
      */
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize($object, $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         return (array) $this->objectNormalizer->normalize($object, $format, $context);
     }

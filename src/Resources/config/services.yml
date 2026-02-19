@@ -7,7 +7,7 @@ services:
     bind:
       Flagbit\Bundle\CategoryBundle\Repository\CategoryConfigRepository: '@flagbit.category.repository.category_config'
       Flagbit\Bundle\CategoryBundle\Repository\CategoryPropertyRepository: '@flagbit.category.repository.category_property'
-      Akeneo\Tool\Component\Classification\Repository\CategoryRepositoryInterface: '@pim_catalog.repository.category'
+      Akeneo\Category\Infrastructure\Component\Classification\Repository\CategoryRepositoryInterface: '@pim_catalog.repository.category'
       Symfony\Component\Serializer\Normalizer\NormalizerInterface: '@pim_internal_api_serializer'
       Flagbit\Bundle\CategoryBundle\Schema\SchemaValidator: '@flagbit.category.schema.config_validator'
     autowire: true

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace spec\Flagbit\Bundle\CategoryBundle\Connector\Processor\Normalization;
 
-use Akeneo\Pim\Enrichment\Component\Category\Model\CategoryInterface;
+use Akeneo\Category\Infrastructure\Component\Model\CategoryInterface;
 use Akeneo\Tool\Component\Batch\Item\InvalidItemException;
 use Akeneo\Tool\Component\Connector\Processor\Normalization\Processor;
 use Flagbit\Bundle\CategoryBundle\Connector\ArrayConverter\StandardToFlat\CategoryProperty as StandardToFlatConverter;

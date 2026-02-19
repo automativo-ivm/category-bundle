@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flagbit\Bundle\CategoryBundle\EventListener;
 
-use Akeneo\Pim\Enrichment\Component\Category\Model\CategoryInterface;
+use Akeneo\Category\Infrastructure\Component\Model\CategoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Flagbit\Bundle\CategoryBundle\Exception\ValidationFailed;
 use Flagbit\Bundle\CategoryBundle\Repository\CategoryPropertyRepository;

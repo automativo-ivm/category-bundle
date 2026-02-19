@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flagbit\Bundle\CategoryBundle\Controller\InternalApi;
 
-use Akeneo\Tool\Component\Classification\Repository\CategoryRepositoryInterface;
+use Akeneo\Category\Infrastructure\Component\Classification\Repository\CategoryRepositoryInterface;
 use Flagbit\Bundle\CategoryBundle\Entity\CategoryProperty;
 use Flagbit\Bundle\CategoryBundle\Repository\CategoryPropertyRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace spec\Flagbit\Bundle\CategoryBundle\EventListener;
 
-use Akeneo\Pim\Enrichment\Component\Category\Model\CategoryInterface;
+use Akeneo\Category\Infrastructure\Component\Model\CategoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use EmptyIterator;
 use Flagbit\Bundle\CategoryBundle\Entity\CategoryProperty;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace spec\Flagbit\Bundle\CategoryBundle\Controller\InternalApi;
 
-use Akeneo\Pim\Enrichment\Component\Category\Model\CategoryInterface;
-use Akeneo\Tool\Component\Classification\Repository\CategoryRepositoryInterface;
+use Akeneo\Category\Infrastructure\Component\Model\CategoryInterface;
+use Akeneo\Category\Infrastructure\Component\Classification\Repository\CategoryRepositoryInterface;
 use Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryPropertyController;
 use Flagbit\Bundle\CategoryBundle\Entity\CategoryProperty;
 use Flagbit\Bundle\CategoryBundle\Repository\CategoryPropertyRepository;

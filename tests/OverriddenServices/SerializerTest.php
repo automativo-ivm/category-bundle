@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flagbit\Bundle\CategoryBundle\Tests\OverriddenServices;
 
-use Akeneo\Pim\Enrichment\Component\Category\Model\Category;
+use Akeneo\Category\Infrastructure\Component\Model\Category;
 use Flagbit\Bundle\CategoryBundle\Entity\CategoryConfig;
 use Flagbit\Bundle\CategoryBundle\Entity\CategoryProperty;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
