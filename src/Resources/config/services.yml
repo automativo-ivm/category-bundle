@@ -1,6 +1,3 @@
-parameters:
-  pim_enrich.view_element.category.tab.property.template: 'FlagbitCategoryBundle:CategoryTree:Tab/property.html.twig'
-
 services:
   Flagbit\Bundle\CategoryBundle\Controller\:
     resource: '../../../src/Controller/'
@@ -9,18 +6,23 @@ services:
       Flagbit\Bundle\CategoryBundle\Repository\CategoryPropertyRepository: '@flagbit.category.repository.category_property'
       Akeneo\Category\Infrastructure\Component\Classification\Repository\CategoryRepositoryInterface: '@pim_catalog.repository.category'
       Symfony\Component\Serializer\Normalizer\NormalizerInterface: '@pim_internal_api_serializer'
-      Flagbit\Bundle\CategoryBundle\Schema\SchemaValidator: '@flagbit.category.schema.config_validator'
+      Flagbit\Bundle\CategoryBundle\Schema\SchemaValidator: '@flagbit.category.schema.property_validator'
+      Doctrine\ORM\EntityManagerInterface: '@doctrine.orm.entity_manager'
     autowire: true
     tags: [ 'controller.service_arguments' ]
 
+  Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryConfigController:
+    bind:
+      Flagbit\Bundle\CategoryBundle\Schema\SchemaValidator: '@flagbit.category.schema.config_validator'
+
   flagbit.category.repository.category_property:
     class: 'Flagbit\Bundle\CategoryBundle\Repository\CategoryPropertyRepository'
-    factory: 'doctrine.orm.entity_manager:getRepository'
+    factory: ['@doctrine.orm.entity_manager', 'getRepository']
     arguments: [ 'Flagbit\Bundle\CategoryBundle\Entity\CategoryProperty' ]
 
   flagbit.category.repository.category_config:
     class: 'Flagbit\Bundle\CategoryBundle\Repository\CategoryConfigRepository'
-    factory: 'doctrine.orm.entity_manager:getRepository'
+    factory: ['@doctrine.orm.entity_manager', 'getRepository']
     arguments: [ 'Flagbit\Bundle\CategoryBundle\Entity\CategoryConfig' ]
 
   flagbit.category.normalizer.object:
@@ -91,3 +93,8 @@ services:
     class: 'Flagbit\Bundle\CategoryBundle\Schema\SchemaValidator'
     arguments:
       - '../Resources/config/schema/config.json'
+
+  flagbit.category.event_listener.inject_loader:
+    class: 'Flagbit\Bundle\CategoryBundle\EventListener\InjectCategoryEditLoaderListener'
+    tags:
+      - { name: 'kernel.event_listener', event: 'kernel.response', method: 'onKernelResponse' }

@@ -24,3 +24,11 @@ flagbit_category.internal_api.category_property_get:
     identifier: '[a-z_0-9]+'
   defaults:
     _controller: Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryPropertyController::get
+
+flagbit_category.internal_api.category_property_post:
+  path: /flagbit/category/api/property/{identifier}
+  methods: [POST]
+  requirements:
+    identifier: '[a-z_0-9]+'
+  defaults:
+    _controller: Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryPropertyController::post

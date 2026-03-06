@@ -2,9 +2,11 @@ import * as React from 'react';
 import PropertyRenderer from './type/property-renderer';
 import { ConfigValuesType } from './config-form';
 import { FlagbitLocales } from './locales';
+import postProperty from './api/post-property';
 
 type CategoryInfo = {
     categoryCode: string;
+    onSaveRef?: (saveFn: () => Promise<void>) => void;
 };
 
 export type ChangeState = (code: string, locale: string, value: any) => void;
@@ -50,6 +52,17 @@ class PropertyForm extends React.Component<CategoryInfo> {
                     configValues: this.state.configValues,
                 });
             });
+
+        if (this.props.onSaveRef) {
+            this.props.onSaveRef(() => this.saveProperties());
+        }
+    }
+
+    async saveProperties(): Promise<void> {
+        if (Object.keys(this.state.propertyValues).length === 0) {
+            return;
+        }
+        await postProperty.post(this.props.categoryCode, this.state.propertyValues);
     }
 
     render(): React.ReactNode {
@@ -57,11 +70,14 @@ class PropertyForm extends React.Component<CategoryInfo> {
             const state = this.state;
 
             const propertyData = state.propertyValues[code] || { [locale]: { locale: locale, data: value } };
-            const isLocalizable = state.configValues[code].isLocalizable;
+            const configEntry = state.configValues[code];
+            if (!configEntry) {
+                return;
+            }
+            const isLocalizable = configEntry.isLocalizable;
 
             propertyData[locale] = { locale: locale, data: value };
 
-            // Fill default value for newly enabled locales
             FlagbitLocales.locales.getEnabledLocales(isLocalizable).forEach((currentLocale) => {
                 if (!(currentLocale in propertyData)) {
                     propertyData[currentLocale] = { locale: currentLocale, data: '' };
