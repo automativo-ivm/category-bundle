@@ -1,19 +1,20 @@
 services:
-  Flagbit\Bundle\CategoryBundle\Controller\:
-    resource: '../../../src/Controller/'
-    bind:
-      Flagbit\Bundle\CategoryBundle\Repository\CategoryConfigRepository: '@flagbit.category.repository.category_config'
-      Flagbit\Bundle\CategoryBundle\Repository\CategoryPropertyRepository: '@flagbit.category.repository.category_property'
-      Akeneo\Category\Infrastructure\Component\Classification\Repository\CategoryRepositoryInterface: '@pim_catalog.repository.category'
-      Symfony\Component\Serializer\Normalizer\NormalizerInterface: '@pim_internal_api_serializer'
-      Flagbit\Bundle\CategoryBundle\Schema\SchemaValidator: '@flagbit.category.schema.property_validator'
-      Doctrine\ORM\EntityManagerInterface: '@doctrine.orm.entity_manager'
-    autowire: true
+  Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryPropertyController:
+    arguments:
+      $repository: '@flagbit.category.repository.category_property'
+      $categoryRepository: '@pim_catalog.repository.category'
+      $normalizer: '@pim_internal_api_serializer'
+      $entityManager: '@doctrine.orm.entity_manager'
+      $validator: '@flagbit.category.schema.property_validator'
     tags: [ 'controller.service_arguments' ]
 
   Flagbit\Bundle\CategoryBundle\Controller\InternalApi\CategoryConfigController:
-    bind:
-      Flagbit\Bundle\CategoryBundle\Schema\SchemaValidator: '@flagbit.category.schema.config_validator'
+    arguments:
+      $entityManager: '@doctrine.orm.entity_manager'
+      $repository: '@flagbit.category.repository.category_config'
+      $normalizer: '@pim_internal_api_serializer'
+      $validator: '@flagbit.category.schema.config_validator'
+    tags: [ 'controller.service_arguments' ]
 
   flagbit.category.repository.category_property:
     class: 'Flagbit\Bundle\CategoryBundle\Repository\CategoryPropertyRepository'
