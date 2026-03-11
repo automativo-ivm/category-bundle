@@ -42,17 +42,17 @@ class InjectCategoryEditLoaderListener
 
         $script = sprintf(
             '<script type="text/javascript" nonce="%s">
-    console.log("[Flagbit] Inline script executing, require:", typeof require);
-    if (typeof require !== "undefined") {
-        try {
-            var result = require("flagbit-category/property/category-edit-loader");
-            console.log("[Flagbit] Module loaded:", result);
-        } catch(e) {
-            console.error("[Flagbit] Failed to load category-edit-loader:", e);
+    (function flagbitLoader() {
+        if (typeof require === "function") {
+            try {
+                require("flagbit-category/property/category-edit-loader");
+            } catch(e) {
+                console.error("[Flagbit] Failed to load category-edit-loader:", e);
+            }
+        } else {
+            setTimeout(flagbitLoader, 200);
         }
-    } else {
-        console.warn("[Flagbit] require is not defined");
-    }
+    })();
 </script>',
             htmlspecialchars($nonce, ENT_QUOTES, 'UTF-8')
         );
