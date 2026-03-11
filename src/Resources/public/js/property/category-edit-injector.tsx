@@ -127,24 +127,28 @@ function isOnCategoryEditPage(): RegExpMatchArray | null {
 }
 
 function interceptCategorySave() {
-    // Intercept Akeneo's category save by listening to jQuery AJAX completions.
-    // When Akeneo saves a category via POST, we save our properties too.
-    const $ = require('jquery');
-    $(document).ajaxComplete(function(_event: any, xhr: any, settings: any) {
-        if (settings.type !== 'POST' || !isOnCategoryEditPage() || !saveFn) {
-            return;
-        }
-        // Check if this is a category save request (URL contains the category edit path)
-        const url = settings.url || '';
-        if (url.includes('/enrich/product-category-tree/') || url.includes('/category/')) {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                console.log('[Flagbit] Category save detected, saving properties...');
-                saveFn().catch((e: any) => {
-                    console.error('[Flagbit] Failed to save properties:', e);
-                });
+    // Akeneo CE7 uses native fetch() API to save categories (not jQuery AJAX).
+    // Monkey-patch window.fetch to detect category save POST requests.
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = function(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+        const result = originalFetch(input, init);
+
+        if (init && init.method === 'POST' && saveFn) {
+            const url = typeof input === 'string' ? input : (input instanceof URL ? input.toString() : (input as Request).url);
+            if (CATEGORY_EDIT_URL_PATTERN.test(url)) {
+                result.then((response: Response) => {
+                    if (response.ok && saveFn) {
+                        console.log('[Flagbit] Category save detected via fetch, saving properties...');
+                        saveFn().catch((e: any) => {
+                            console.error('[Flagbit] Failed to save properties:', e);
+                        });
+                    }
+                }).catch(() => {});
             }
         }
-    });
+
+        return result;
+    };
 }
 
 function init() {
