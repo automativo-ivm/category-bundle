@@ -45,13 +45,13 @@ class InjectCategoryEditLoaderListener
     (function flagbitLoader() {
         if (typeof require === "function") {
             try {
+                var fr = require("pim/fetcher-registry");
+                fr.getFetcher("locale");
                 require("flagbit-category/property/category-edit-loader");
-            } catch(e) {
-                console.error("[Flagbit] Failed to load category-edit-loader:", e);
-            }
-        } else {
-            setTimeout(flagbitLoader, 200);
+                return;
+            } catch(e) {}
         }
+        setTimeout(flagbitLoader, 500);
     })();
 </script>',
             htmlspecialchars($nonce, ENT_QUOTES, 'UTF-8')

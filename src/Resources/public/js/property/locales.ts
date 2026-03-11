@@ -2,7 +2,7 @@ const FetcherRegistry = require('pim/fetcher-registry');
 const userContext = require('pim/user-context');
 
 class Locale {
-    private locales: string[];
+    private locales: string[] = [];
 
     async initialize() {
         await FetcherRegistry.getFetcher('locale')
