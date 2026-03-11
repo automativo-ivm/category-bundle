@@ -97,5 +97,7 @@ services:
 
   flagbit.category.event_listener.inject_loader:
     class: 'Flagbit\Bundle\CategoryBundle\EventListener\InjectCategoryEditLoaderListener'
+    arguments:
+      $nonceGenerator: '@security.script_nonce_generator'
     tags:
       - { name: 'kernel.event_listener', event: 'kernel.response', method: 'onKernelResponse' }
