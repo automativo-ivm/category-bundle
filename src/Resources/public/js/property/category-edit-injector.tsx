@@ -126,42 +126,30 @@ function isOnCategoryEditPage(): RegExpMatchArray | null {
         window.location.href.match(CATEGORY_EDIT_URL_PATTERN);
 }
 
-function interceptSaveButton() {
-    // Intercept clicks on the primary save button (level="primary")
-    document.addEventListener('click', async (event: MouseEvent) => {
-        const target = event.target as HTMLElement;
-        // Akeneo uses styled-components buttons with specific class patterns
-        const button = target.closest('button');
-        if (!button) {
+function interceptCategorySave() {
+    // Intercept Akeneo's category save by listening to jQuery AJAX completions.
+    // When Akeneo saves a category via POST, we save our properties too.
+    const $ = require('jquery');
+    $(document).ajaxComplete(function(_event: any, xhr: any, settings: any) {
+        if (settings.type !== 'POST' || !isOnCategoryEditPage() || !saveFn) {
             return;
         }
-
-        if (!isOnCategoryEditPage()) {
-            return;
-        }
-
-        // Check if this is a primary/save button - Akeneo's Button level="primary" renders blue
-        const isPrimaryButton = button.getAttribute('level') === 'primary' ||
-            button.classList.contains('AknButton--apply') ||
-            (button.querySelector && button.closest('[class*="PageHeader-Actions"], [class*="Actions"]'));
-
-        if (!isPrimaryButton) {
-            return;
-        }
-
-        if (saveFn) {
-            try {
-                await saveFn();
-            } catch (e) {
-                console.error('Failed to save Flagbit category properties:', e);
+        // Check if this is a category save request (URL contains the category edit path)
+        const url = settings.url || '';
+        if (url.includes('/enrich/product-category-tree/') || url.includes('/category/')) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                console.log('[Flagbit] Category save detected, saving properties...');
+                saveFn().catch((e: any) => {
+                    console.error('[Flagbit] Failed to save properties:', e);
+                });
             }
         }
-    }, true);
+    });
 }
 
 function init() {
     console.log('[Flagbit] category-edit-injector init() called');
-    interceptSaveButton();
+    interceptCategorySave();
 
     let lastHash = '';
 
