@@ -39,20 +39,31 @@ function getCategoryCodeFromPage(): string | null {
 }
 
 function findPropertiesTabContent(): HTMLElement | null {
-    // Look for the form container within the active properties tab
-    // CE7 renders the properties form inside a styled div
+    // Strategy: find the readonly code input and walk up the DOM to the FormContainer.
+    // In CE7 production builds, styled-components class names are hashed (no "FormContainer"
+    // in the class), so we can't rely on class-based selectors. Instead, we use the
+    // structural layout: input → TextInputContainer → FieldContainer → FormContainer.
+    // The FormContainer has 4+ direct children (SectionTitle, Field, SectionTitle, Fields...).
+    const codeInput = document.querySelector<HTMLInputElement>('input[name="code"][readonly]');
+    if (codeInput) {
+        console.log('[Flagbit] Found code input:', codeInput.value);
+        let el: HTMLElement | null = codeInput;
+        for (let depth = 0; depth < 10 && el && el !== document.body; depth++) {
+            el = el.parentElement;
+            if (el && el.tagName === 'DIV' && el.children.length >= 4) {
+                console.log('[Flagbit] Found FormContainer at depth', depth, 'with', el.children.length, 'children');
+                return el;
+            }
+        }
+        console.log('[Flagbit] Could not find FormContainer by walking up from code input');
+    } else {
+        console.log('[Flagbit] Code input not found (input[name="code"][readonly])');
+    }
+
+    // Fallback: class-based selectors (works in development builds where displayName is preserved)
     const formContainers = document.querySelectorAll('div[class*="FormContainer"], div[class*="formcontainer"]');
     if (formContainers.length > 0) {
         return formContainers[0] as HTMLElement;
-    }
-
-    // Fallback: look for the SectionTitle with "Code" and find its parent container
-    const sectionTitles = document.querySelectorAll('[class*="SectionTitle"]');
-    for (let i = 0; i < sectionTitles.length; i++) {
-        const title = sectionTitles[i];
-        if (title.textContent?.toLowerCase().includes('code')) {
-            return title.parentElement as HTMLElement;
-        }
     }
 
     return null;
@@ -149,6 +160,7 @@ function interceptSaveButton() {
 }
 
 function init() {
+    console.log('[Flagbit] category-edit-injector init() called');
     interceptSaveButton();
 
     let lastHash = '';
@@ -162,6 +174,7 @@ function init() {
 
         const match = isOnCategoryEditPage();
         if (match) {
+            console.log('[Flagbit] Detected category edit page, hash:', currentHash);
             const categoryId = match[1];
             if (categoryId !== currentCategoryId) {
                 cleanup();
