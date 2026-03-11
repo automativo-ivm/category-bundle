@@ -33,7 +33,11 @@ class InjectCategoryEditLoaderListener
         $script = <<<'JS'
 <script type="text/javascript">
     if (typeof require !== 'undefined') {
-        require(['flagbit-category/property/category-edit-loader']);
+        try {
+            require('flagbit-category/property/category-edit-loader');
+        } catch(e) {
+            console.error('[Flagbit] Failed to load category-edit-loader:', e);
+        }
     }
 </script>
 JS;
